@@ -12,7 +12,12 @@ from src.services.users import UserService
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.post("/register", response_model=User, status_code=status.HTTP_201_CREATED, summary="User registration")
+@router.post(
+    "/register",
+    response_model=User,
+    status_code=status.HTTP_201_CREATED,
+    summary="User registration",
+)
 async def register_user(
     user_data: UserCreate,
     background_tasks: BackgroundTasks,
@@ -86,7 +91,7 @@ async def request_email(
     body: RequestEmail,
     background_tasks: BackgroundTasks,
     request: Request,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     user_service = UserService(db)
     user = await user_service.get_user_by_email(body.email)
