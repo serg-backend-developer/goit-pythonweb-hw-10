@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.conf.config import settings
 from src.database.db import get_db
-from src.schemas import User
+from src.schemas.contacts import User
 from src.services.auth import get_current_user
 from src.services.upload_file import UploadFileService
 from src.services.users import UserService
@@ -23,7 +23,7 @@ async def me(request: Request, user: User = Depends(get_current_user)):
     return user
 
 
-@router.patch("/avatar", response_model=User)
+@router.patch("/avatar", response_model=User, summary="Update User avatar")
 async def update_avatar_user(
     file: UploadFile = File(),
     user: User = Depends(get_current_user),

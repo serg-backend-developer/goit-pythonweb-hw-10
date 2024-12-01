@@ -2,7 +2,7 @@ from libgravatar import Gravatar
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.repository.users import UserRepository
-from src.schemas import UserCreate
+from src.schemas.contacts import UserCreate
 
 
 class UserService:

@@ -12,7 +12,7 @@ from src.services.users import UserService
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.post("/register", response_model=User, status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=User, status_code=status.HTTP_201_CREATED, summary="User registration")
 async def register_user(
     user_data: UserCreate,
     background_tasks: BackgroundTasks,
@@ -43,7 +43,7 @@ async def register_user(
     return new_user
 
 
-@router.post("/login", response_model=Token)
+@router.post("/login", response_model=Token, summary="User login")
 async def login_user(
     form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)
 ):
@@ -66,7 +66,7 @@ async def login_user(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.get("/confirmed_email/{token}")
+@router.get("/confirmed_email/{token}", summary="Email confirmation")
 async def confirmed_email(token: str, db: AsyncSession = Depends(get_db)):
     email = await get_email_from_token(token)
     user_service = UserService(db)
@@ -81,12 +81,12 @@ async def confirmed_email(token: str, db: AsyncSession = Depends(get_db)):
     return {"message": "Your email has been confirmed."}
 
 
-@router.post("/request_email")
+@router.post("/request_email", summary="Request email")
 async def request_email(
     body: RequestEmail,
     background_tasks: BackgroundTasks,
     request: Request,
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db)
 ):
     user_service = UserService(db)
     user = await user_service.get_user_by_email(body.email)
