@@ -56,7 +56,7 @@ async def login_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    if not user.confirmed:
+    if not user.is_confirmed:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Email is incorrect.",
@@ -75,7 +75,7 @@ async def confirmed_email(token: str, db: AsyncSession = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Verification error"
         )
-    if user.confirmed:
+    if user.is_confirmed:
         return {"message": "Your email has already been confirmed."}
     await user_service.confirmed_email(email)
     return {"message": "Your email has been confirmed."}
@@ -91,7 +91,7 @@ async def request_email(
     user_service = UserService(db)
     user = await user_service.get_user_by_email(body.email)
 
-    if user and user.confirmed:
+    if user and user.is_confirmed:
         return {"message": "Your email has already been confirmed."}
     if user:
         background_tasks.add_task(
