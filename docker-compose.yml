@@ -2,8 +2,10 @@ services:
   db:
     image: postgres:latest
     environment:
-      - POSTGRES_USER=serg
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=hw8
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
